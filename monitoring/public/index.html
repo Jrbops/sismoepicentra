@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epicentra Server Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f23;
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: backgroundPulse 15s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.8em;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
+            to { text-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 40px rgba(118, 75, 162, 0.6); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-card .label {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .status-online {
+            color: #10b981;
+        }
+        
+        .status-offline {
+            color: #ef4444;
+        }
+        
+        .process-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .process-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .process-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .status-badge.online {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-badge.stopped {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .process-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .process-stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .process-stat .label {
+            color: #999;
+            font-size: 0.8em;
+            margin-bottom: 5px;
+        }
+        
+        .process-stat .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .logs-container {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .logs-container pre {
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .refresh-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .auto-refresh input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Epicentra Server Monitor</h1>
+        
+        <div class="auto-refresh">
+            <input type="checkbox" id="autoRefresh" checked>
+            <label for="autoRefresh">Otomatik Yenileme (5 saniye)</label>
+            <button class="refresh-btn" onclick="fetchData()">🔄 Yenile</button>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid"></div>
+        <div id="processesContainer"></div>
+    </div>
+
+    <script>
+        let autoRefreshInterval;
+        
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/processes');
+                const processes = await response.json();
+                
+                updateStats(processes);
+                updateProcesses(processes);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        function updateStats(processes) {
+            const totalProcesses = processes.length;
+            const onlineProcesses = processes.filter(p => p.status === 'online').length;
+            const totalCPU = processes.reduce((sum, p) => sum + p.cpu, 0).toFixed(1);
+            const totalMemory = (processes.reduce((sum, p) => sum + p.memory, 0) / 1024 / 1024).toFixed(0);
+            
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <h3>Toplam Process</h3>
+                    <div class="value">${totalProcesses}</div>
+                    <div class="label">Aktif Servisler</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Durum</h3>
+                    <div class="value status-${onlineProcesses > 0 ? 'online' : 'offline'}">
+                        ${onlineProcesses}/${totalProcesses}
+                    </div>
+                    <div class="label">Online</div>
+                </div>
+                <div class="stat-card">
+                    <h3>CPU Kullanımı</h3>
+                    <div class="value">${totalCPU}%</div>
+                    <div class="label">Toplam</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Bellek Kullanımı</h3>
+                    <div class="value">${totalMemory} MB</div>
+                    <div class="label">RAM</div>
+                </div>
+            `;
+        }
+        
+        function formatUptime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (days > 0) return `${days}g ${hours % 24}s`;
+            if (hours > 0) return `${hours}s ${minutes % 60}d`;
+            if (minutes > 0) return `${minutes}d ${seconds % 60}s`;
+            return `${seconds}s`;
+        }
+        
+        async function updateProcesses(processes) {
+            const container = document.getElementById('processesContainer');
+            
+            const processesHTML = await Promise.all(processes.map(async (proc) => {
+                const logsResponse = await fetch(`/api/logs/${proc.name}`);
+                const logsData = await logsResponse.json();
+                
+                return `
+                    <div class="process-card">
+                        <div class="process-header">
+                            <div class="process-name">${proc.name}</div>
+                            <div class="status-badge ${proc.status}">${proc.status.toUpperCase()}</div>
+                        </div>
+                        
+                        <div class="process-stats">
+                            <div class="process-stat">
+                                <div class="label">PID</div>
+                                <div class="value">${proc.pid || 'N/A'}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label">CPU</div>
+                                <div class="value">${proc.cpu}%</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label">Memory</div>
+                                <div class="value">${(proc.memory / 1024 / 1024).toFixed(0)} MB</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label">Uptime</div>
+                                <div class="value">${formatUptime(proc.uptime)}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label">Restarts</div>
+                                <div class="value">${proc.restarts}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label">Version</div>
+                                <div class="value">${proc.version || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-bottom: 10px; color: #667eea;">📋 Son Loglar</h3>
+                        <div class="logs-container">
+                            <pre>${logsData.logs || 'Log bulunamadı'}</pre>
+                        </div>
+                    </div>
+                `;
+            }));
+            
+            container.innerHTML = processesHTML.join('');
+        }
+        
+        // Auto refresh toggle
+        document.getElementById('autoRefresh').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                autoRefreshInterval = setInterval(fetchData, 5000);
+            } else {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+        
+        // Initial load
+        fetchData();
+        autoRefreshInterval = setInterval(fetchData, 5000);
+    </script>
+</body>
+</html>

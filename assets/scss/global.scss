@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  background-color: $white;
+  color: $dark;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 16px;
+}
+
+[disabled] {
+  pointer-events: none;
+  opacity: 0.8;
+  filter: blur(0.5px);
+}
+
+body[data-theme='dark'] {
+  background-color: $dark-bg;
+  color: $dark-text;
+  transition: background 0.3s, color 0.3s;
+}
+body[data-theme='dark'] .settings__section,
+body[data-theme='dark'] .favorites-bar,
+body[data-theme='dark'] .toolbar {
+  background: $dark-surface;
+  color: $dark-text;
+  border-color: $dark-border;
+}
+body[data-theme='dark'] select,
+body[data-theme='dark'] input,
+body[data-theme='dark'] button {
+  background: $dark-gray;
+  color: $dark-text;
+  border-color: $dark-border;
+}
+body[data-theme='dark'] .favorite-city-btn.active {
+  background: $dark-accent;
+  color: $dark-text;
+}

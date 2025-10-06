@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Epicentra Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header animate__animated animate__fadeInDown">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <h1>Epicentra Dashboard</h1>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="connectionStatus"></div>
+                    <span id="connectionText">Bağlanıyor...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Control Panel -->
+            <section class="control-panel animate__animated animate__fadeInLeft">
+                <h2><i class="fas fa-gamepad"></i> Kontrol Paneli</h2>
+                <div class="button-grid">
+                    <button class="control-btn start-btn" data-command="start">
+                        <i class="fas fa-play"></i>
+                        <span>Başlat</span>
+                    </button>
+                    <button class="control-btn stop-btn" data-command="stop">
+                        <i class="fas fa-stop"></i>
+                        <span>Durdur</span>
+                    </button>
+                    <button class="control-btn restart-btn" data-command="restart">
+                        <i class="fas fa-redo"></i>
+                        <span>Yeniden Başlat</span>
+                    </button>
+                    <button class="control-btn dev-btn" data-command="dev">
+                        <i class="fas fa-code"></i>
+                        <span>Dev Mode</span>
+                    </button>
+                    <button class="control-btn build-btn" data-command="build">
+                        <i class="fas fa-hammer"></i>
+                        <span>Build</span>
+                    </button>
+                    <button class="control-btn install-btn" data-command="install">
+                        <i class="fas fa-download"></i>
+                        <span>Install</span>
+                    </button>
+                    <button class="control-btn clean-btn" data-command="clean">
+                        <i class="fas fa-broom"></i>
+                        <span>Temizle</span>
+                    </button>
+                    <button class="control-btn update-btn" data-command="update">
+                        <i class="fas fa-sync"></i>
+                        <span>Güncelle</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Status Panel -->
+            <section class="status-panel animate__animated animate__fadeInRight">
+                <h2><i class="fas fa-chart-line"></i> Proje Durumu</h2>
+                <div class="status-grid">
+                    <div class="status-card" id="projectStatus">
+                        <div class="status-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>Proje</h3>
+                            <p id="projectStatusText">Kontrol ediliyor...</p>
+                        </div>
+                    </div>
+                    <div class="status-card" id="dependenciesStatus">
+                        <div class="status-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>Dependencies</h3>
+                            <p id="dependenciesStatusText">Kontrol ediliyor...</p>
+                        </div>
+                    </div>
+                    <div class="status-card" id="buildStatus">
+                        <div class="status-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>Build</h3>
+                            <p id="buildStatusText">Kontrol ediliyor...</p>
+                        </div>
+                    </div>
+                    <div class="status-card" id="pm2Status">
+                        <div class="status-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="status-info">
+                            <h3>PM2</h3>
+                            <p id="pm2StatusText">Kontrol ediliyor...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Process Monitor -->
+            <section class="process-monitor animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-tasks"></i> Süreç Monitörü</h2>
+                <div class="process-list" id="processList">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>Süreçler yükleniyor...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Command Output -->
+            <section class="command-output animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-terminal"></i> Komut Çıktısı</h2>
+                <div class="output-container">
+                    <div class="output-header">
+                        <button class="clear-btn" id="clearOutput">
+                            <i class="fas fa-trash"></i> Temizle
+                        </button>
+                        <button class="toggle-logs-btn" id="toggleLogs">
+                            <i class="fas fa-eye"></i> Canlı Loglar
+                        </button>
+                    </div>
+                    <div class="output-content" id="outputContent">
+                        <div class="welcome-message">
+                            <i class="fas fa-robot"></i>
+                            <p>Epicentra Dashboard'a hoş geldiniz!</p>
+                            <p>Bir komut çalıştırmak için yukarıdaki butonları kullanın.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links -->
+            <section class="quick-links animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-external-link-alt"></i> Hızlı Erişim</h2>
+                <div class="links-grid">
+                    <a href="http://localhost:3000" target="_blank" class="link-card">
+                        <i class="fas fa-globe"></i>
+                        <span>Ana Uygulama</span>
+                    </a>
+                    <a href="http://localhost:3000/api" target="_blank" class="link-card">
+                        <i class="fas fa-code"></i>
+                        <span>API</span>
+                    </a>
+                    <a href="http://localhost:9615" target="_blank" class="link-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Monitoring</span>
+                    </a>
+                    <a href="#" class="link-card" id="refreshStatus">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Durumu Yenile</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-robot fa-spin"></i>
+            <p id="loadingText">İşlem yapılıyor...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<template>
+  <div class="early-warning" vertical-center>
+    <h2>Gerçek Zamanlı Erken Uyarı</h2>
+    <div v-if="!connected" class="ew-status ew-status--disconnected">Sunucuya bağlanıyor...</div>
+    <div v-else class="ew-status ew-status--connected">Bağlandı</div>
+    <div v-if="lastQuake" class="ew-alert" :class="{ active: showAlert }">
+      <h3>Yeni Deprem Uyarısı!</h3>
+      <p><strong>{{ lastQuake.Region.City }}</strong> - {{ lastQuake.Region.District }}</p>
+      <p>Büyüklük: {{ lastQuake.Magnitude }}</p>
+      <p>Zaman: {{ lastQuake.Date }}</p>
+      <div v-if="countdown > 0" class="ew-countdown">
+        <strong>{{ countdown }}</strong> saniye sonra deprem dalgası ulaşacak!
+      </div>
+      <div v-else-if="countdown === 0" class="ew-countdown ew-arrived">
+        <strong>Deprem dalgası ulaştı!</strong>
+      </div>
+      <button @click="showAlert = false">Kapat</button>
+    </div>
+    <div class="ew-controls">
+      <label>
+        Minimum Büyüklük:
+        <input type="number" v-model.number="minMag" step="0.1" />
+      </label>
+      <label>
+        Şehir:
+        <input type="text" v-model="cityFilter" placeholder="Tümü" />
+      </label>
+      <button @click="saveSettings">Kaydet</button>
+      <button @click="startTest">Test Başlat</button>
+    </div>
+  </div>
+</template>
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue';
+const lastQuake = ref<any>(null);
+const showAlert = ref(false);
+const connected = ref(false);
+const minMag = ref(3);
+const cityFilter = ref('');
+const countdown = ref(-1);
+let countdownTimer: any = null;
+function startCountdown() {
+  countdown.value = 10;
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    countdown.value--;
+    if (countdown.value === 0) {
+      clearInterval(countdownTimer);
+      setTimeout(() => { showAlert.value = false; countdown.value = -1; }, 4000);
+    }
+  }, 1000);
+}
+let es: EventSource | null = null;
+
+onMounted(() => {
+  // Ayarları yükle
+  const raw = localStorage.getItem('zelzele.ew-settings');
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.minMag === 'number') minMag.value = parsed.minMag;
+      if (typeof parsed.cityFilter === 'string') cityFilter.value = parsed.cityFilter;
+    } catch {}
+  }
+  es = new EventSource('/api/early-warning-sse');
+  es.onopen = () => { connected.value = true; };
+  es.onerror = () => { connected.value = false; };
+  es.onmessage = (e) => {
+    try {
+      const quake = JSON.parse(e.data);
+      // Eğer test geri sayımı devam ediyorsa, gerçek deprem bildirimi test geri sayımını sıfırlasın
+      if (countdown.value > 0) {
+        clearInterval(countdownTimer);
+        countdown.value = -1;
+      }
+      if (quake.Magnitude >= minMag.value && (!cityFilter.value || quake.Region.City === cityFilter.value)) {
+        lastQuake.value = quake;
+        showAlert.value = true;
+        startCountdown();
+        // İsteğe bağlı: sesli uyarı
+        if (window.Audio) {
+          // const audio = new Audio('/android-icon-72x72.png');
+          // audio.play();
+        }
+      }
+    } catch {}
+  };
+});
+onUnmounted(() => {
+  if (es) es.close();
+});
+function saveSettings() {
+  localStorage.setItem('zelzele.ew-settings', JSON.stringify({ minMag: minMag.value, cityFilter: cityFilter.value }));
+  showAlert.value = false;
+}
+function startTest() {
+  // Tam arayüze uygun örnek deprem verisi
+  lastQuake.value = {
+    ID: `test_${Date.now()}`,
+    Date: new Date().toLocaleString(),
+    Magnitude: minMag.value,
+    Type: 'Test',
+    Latitude: 39.9,
+    Longitude: 32.8,
+    Depth: 10,
+    Region: { City: cityFilter.value || 'Test Şehri', District: 'Test İlçe' },
+    Source: 'TEST',
+    ProviderURL: '',
+  };
+  showAlert.value = true;
+  startCountdown();
+}
+</script>
+<style lang="scss" scoped>
+.early-warning {
+  padding: 20px;
+  width: 100%;
+  max-width: $max-width-one;
+  margin-inline: auto;
+  text-align: center;
+  .ew-status {
+    margin: 10px 0;
+    &--connected { color: $green; }
+    &--disconnected { color: $red; }
+  }
+  .ew-alert {
+    background: $red-light;
+    color: $dark;
+    border: 2px solid $red;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    display: none;
+    &.active { display: block; }
+    button { margin-top: 10px; }
+  }
+  .ew-countdown {
+    font-size: 22px;
+    color: $orange;
+    margin: 12px 0;
+    &.ew-arrived {
+      color: $red;
+      font-weight: bold;
+    }
+  }
+  .ew-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    label { display: flex; align-items: center; gap: 6px; }
+  }
+}
+</style>

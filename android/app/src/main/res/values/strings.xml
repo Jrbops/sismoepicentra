@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Epicentra Io</string>
+    <string name="title_activity_main">Epicentra Io</string>
+    <string name="package_name">com.epicentra.app</string>
+    <string name="custom_url_scheme">com.epicentra.app</string>
+</resources>

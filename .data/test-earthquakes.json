@@ -1,0 +1,302 @@
+[
+  {
+    "ID": "test-1759434839581",
+    "Date": "2025-10-02T19:53:59.581Z",
+    "Magnitude": 4.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 15,
+    "Region": {
+      "City": "Test Şehri",
+      "District": "Test İlçe"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759434934705",
+    "Date": "2025-10-02T19:55:34.705Z",
+    "Magnitude": 4.8,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 12,
+    "Region": {
+      "City": "FCM Test",
+      "District": "Bildirim"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759594998170",
+    "Date": "2025-10-04T16:23:18.170Z",
+    "Magnitude": 5.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Tatbikat",
+      "District": "Simülasyon"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759595511334",
+    "Date": "2025-10-04T16:31:51.334Z",
+    "Magnitude": 5.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Tatbikat",
+      "District": "Simülasyon"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759596754797",
+    "Date": "2025-10-04T16:52:34.797Z",
+    "Magnitude": 5.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Tatbikat",
+      "District": "Simülasyon"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759600659716",
+    "Date": "2025-10-04T17:57:39.716Z",
+    "Magnitude": 5.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Tatbikat",
+      "District": "Simülasyon"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759621204504",
+    "Date": "2025-10-04T23:40:04.504Z",
+    "Magnitude": 4.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Test",
+      "District": "Yönetim"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759621252753",
+    "Date": "2025-10-04T23:40:52.753Z",
+    "Magnitude": 4.2,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 8.5,
+    "Region": {
+      "City": "İstanbul",
+      "District": "Kadıköy"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759621363690",
+    "Date": "2025-10-04T23:42:43.690Z",
+    "Magnitude": 4.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Test Şehir",
+      "District": "Test İlçe"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759621911296",
+    "Date": "2025-10-04T23:51:51.296Z",
+    "Magnitude": 4.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Test",
+      "District": "Yönetim"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759622067760",
+    "Date": "2025-10-04T23:54:27.760Z",
+    "Magnitude": 4.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 10,
+    "Region": {
+      "City": "Test Şehir",
+      "District": "Test İlçe"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759628599674",
+    "Date": "2025-10-05T01:43:19.674Z",
+    "Magnitude": 5.2,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 15,
+    "Region": {
+      "City": "İstanbul",
+      "District": "Beşiktaş"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759628859324",
+    "Date": "2025-10-05T01:47:39.324Z",
+    "Magnitude": 4.8,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 12,
+    "Region": {
+      "City": "Ankara",
+      "District": "Çankaya"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629143939",
+    "Date": "2025-10-05T01:52:23.939Z",
+    "Magnitude": 5.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 8,
+    "Region": {
+      "City": "Test Şehir",
+      "District": "Test İlçe"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629446683",
+    "Date": "2025-10-05T01:57:26.683Z",
+    "Magnitude": 6.2,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 5,
+    "Region": {
+      "City": "İstanbul",
+      "District": "Kadıköy"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629655783",
+    "Date": "2025-10-05T02:00:55.783Z",
+    "Magnitude": 7.1,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 3,
+    "Region": {
+      "City": "Test Şehir",
+      "District": "Test İlçe"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629691870",
+    "Date": "2025-10-05T02:01:31.870Z",
+    "Magnitude": 8.2,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 2,
+    "Region": {
+      "City": "İstanbul",
+      "District": "Beşiktaş"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629803591",
+    "Date": "2025-10-05T02:03:23.591Z",
+    "Magnitude": 9,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 1,
+    "Region": {
+      "City": "BÜYÜK DEPREM",
+      "District": "TEST"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629868172",
+    "Date": "2025-10-05T02:04:28.172Z",
+    "Magnitude": 6.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 5,
+    "Region": {
+      "City": "FCM TEST",
+      "District": "BILDIRIM"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  },
+  {
+    "ID": "test-1759629946636",
+    "Date": "2025-10-05T02:05:46.636Z",
+    "Magnitude": 7.5,
+    "Type": "ML",
+    "Latitude": 41.0082,
+    "Longitude": 28.9784,
+    "Depth": 2,
+    "Region": {
+      "City": "FIREBASE TEST",
+      "District": "FCM"
+    },
+    "Source": "KOERI",
+    "ProviderURL": "test"
+  }
+]

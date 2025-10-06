@@ -1,0 +1,128 @@
+import packageJson from "./package.json";
+export default defineNuxtConfig({
+  ssr: false, // SPA modu - APK için gerekli
+  nitro: {
+    preset: 'static'
+  },
+  runtimeConfig: {
+    KOERI_API_BASE: process.env.NUXT_KOERI_API_BASE || undefined,
+    public: {
+      appVersion: packageJson.version,
+      appTitle: "Son Depremler, Deprem Analiz ve Canlı Takip",
+      appDescription:
+        "Deprem analizi yapabilir, son depremleri öğrenebilir tüm depremler ile karşılaştırabilirsiniz.",
+      KOERI_API_BASE: process.env.NUXT_PUBLIC_KOERI_API_BASE || undefined,
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://epicentra.io',
+    },
+  },
+  devServer: {
+    host: '0.0.0.0',
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData:
+            '@import "@/assets/scss/variables.scss"; @import "@/assets/scss/mixins.scss";',
+        },
+      },
+    },
+  },
+  css: [
+    "@/assets/scss/global.scss",
+    "@/assets/scss/fonts.scss",
+    "@/assets/scss/align.scss",
+    "@/assets/scss/typography.scss",
+    "leaflet/dist/leaflet.css",
+    "leaflet.markercluster/dist/MarkerCluster.css",
+    "leaflet.markercluster/dist/MarkerCluster.Default.css",
+  ],
+  plugins: [
+    {
+      src: "@/plugins/dayjs.plugin.ts",
+    },
+    {
+      src: "@/plugins/gtm.plugin.ts",
+      mode: "client",
+    },
+  ],
+  modules: ["@pinia/nuxt"],
+  app: {
+    head: {
+      charset: "utf-16",
+      viewport: "initial-scale=1",
+      title: "Epicentra İo - Son Depremler, Deprem Analiz ve Canlı Takip",
+      meta: [
+        {
+          name: "description",
+          content:
+            "Epicentra İo ile Deprem analizi yapabilir, son depremleri öğrenebilir tüm depremler ile karşılaştırabilirsiniz.",
+        },
+        {
+          name: "viewport",
+          content: "initial-scale=1, viewport-fit=cover",
+        },
+        {
+          name: "msapplication-TileColor",
+          content: "#ffffff",
+        },
+        {
+          name: "msapplication-TileImage",
+          content: "/ms-icon-144x144.png",
+        },
+        {
+          name: "theme-color",
+          content: "#ffffff",
+        },
+        {
+          property: "og:title",
+          content: "Son Depremler",
+        },
+        {
+          property: "og:description",
+          content:
+            "Son depremleri görüntüleyip, detayları öğrenin, geçmiş depremlerle grafiksel olarak kıyaslayın",
+        },
+        {
+          property: "og:image",
+          content: "https://zelzele.io/_nuxt/logo.4cb0c464.svg",
+        },
+      ],
+      link: [
+        {
+          rel: "apple-touch-icon",
+          sizes: "57x57",
+          href: "/apple-icon-57x57.png",
+        },
+        {
+          rel: "manifest",
+          href: "/manifest.json",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "96x96",
+          href: "/favicon-96x96.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "192x192",
+          href: "/android-icon-192x192.png",
+        },
+      ],
+    },
+  },
+});

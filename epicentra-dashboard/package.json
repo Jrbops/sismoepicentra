@@ -1,0 +1,23 @@
+{
+  "name": "epicentra-dashboard",
+  "version": "1.0.0",
+  "description": "Epicentra Project Management Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "child_process": "^1.0.2",
+    "fs-extra": "^11.1.1",
+    "pm2": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["epicentra", "dashboard", "project-management"],
+  "author": "Cascade AI",
+  "license": "MIT"
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "991202392911",
+    "project_id": "epicentraio",
+    "storage_bucket": "epicentraio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991202392911:android:9b7bcdcc5490c627ea233a",
+        "android_client_info": {
+          "package_name": "com.epicentra.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSuTSwnohtcbtgmNkCYy2NhTockgXTsNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

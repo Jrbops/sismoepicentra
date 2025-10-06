@@ -1,0 +1,25 @@
+@use "sass:color";
+
+$dark: #5e6676;
+$gray-one: #d1d5db;
+$gray-two: #a2a9c0;
+$gray-three: #6a7492;
+$white: #fff;
+$primary: #007bff;
+
+
+
+$max-width-one: 800px;
+$padding-one: 10px;
+$red: #fca5a5;
+$orange: #fb923c;
+$green: #28a745;
+$red-light: color.adjust($red, $alpha: -0.1);
+$orange-light: color.adjust($orange, $alpha: -0.1);
+$green-light: color.adjust($green, $alpha: -0.1);
+$dark-bg: #181a20;
+$dark-surface: #23262f;
+$dark-text: #e5e7eb;
+$dark-gray: #444857;
+$dark-accent: #fb923c;
+$dark-border: #33374a;

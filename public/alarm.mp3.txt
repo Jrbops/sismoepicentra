@@ -1,0 +1,6 @@
+# Alarm sesi için:
+# YouTube videosundan (https://www.youtube.com/watch?v=O1eG1htakEs) 
+# 15. saniyeden itibaren ses çıkarıp buraya alarm.mp3 olarak kaydet
+# 
+# Alternatif: Herhangi bir alarm/siren sesi kullanabilirsin
+# Örnek: https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3

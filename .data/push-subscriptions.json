@@ -1,0 +1,50 @@
+[
+  {
+    "endpoint": "https://updates.push.services.mozilla.com/wpush/v2/gAAAAABo2s_WhxvhOdG3oYu4Cbo-RFDwuvJDG1qxNX6quaB3pQtkys35I4RqiAoYEoPMcxpijH8Q-ag8uZ1TIpxovfmZTSAlHMALIfujYa1-x7x95nzBgJjJEkf4E0-lvnmeR6OjOUW9DPsHK2MdumvN_BxoTxo1fuDYqzlChu92k5CMgn2B5d8",
+    "keys": {
+      "auth": "dwi-oOX4w1xxheyaG8EY0Q",
+      "p256dh": "BMwXgXrAdwtQ6-l5-Iq6JQV7sC6akcTHyNKntthxDYOkJMZdq07zxFerkfgbFE-LeWG47i2v12bab-_gQT1buA4"
+    },
+    "userSettings": {
+      "minMag": 3,
+      "cityFilter": "",
+      "active": true
+    }
+  },
+  {
+    "endpoint": "https://updates.push.services.mozilla.com/wpush/v2/gAAAAABo2uMR2O-RSBpeXG_Ma6O0P1KFBwapX58vvhfC-YoX_VVgvBbEGNHAzZ6dKt7WGVYU8osdhRn_7x0_1_W-zh_SF4wXtUKX9GprejB2QH986BqF7dE85PheQ_2pehCOVLReQ8iiahpSEgNk2k_H7j44CAqQvkOaFpt4owK6m69np2Ll9GM",
+    "keys": {
+      "auth": "PeSmKzvDENgQu8uFOtZB0w",
+      "p256dh": "BFhsSru17vulozmJfjfp3D-9jshi9jLaB7MqBjSY9iXsDYkeAebH8ELtAYN-i5La1_ZhzMsx2FM4POdOpNlMWao"
+    },
+    "userSettings": {
+      "minMag": 3,
+      "cityFilter": "",
+      "active": true
+    }
+  },
+  {
+    "endpoint": "https://updates.push.services.mozilla.com/wpush/v2/gAAAAABo2ueGiwR2lA3UkudCiiEuNeh7pyqpTxc-TQYZkJUggA1UZ4bk0tN9_BVr1QASjHrWAJNi4GdKUyXVQ5RuPHi2Ac2XKZCXaNVhYNVETrgZPtaRKf8xxTXAGTX0tS378bsphN0opbngaENdOGFpB7LMrZ9dqsPWATXSfRQILitWV4AucKE",
+    "keys": {
+      "auth": "wq2q6tNTDwm70XQcV2E1TQ",
+      "p256dh": "BHDZWsLHW1koTHjVVVCCRUnk7TUqFj-XFpsBZ5brlwAIMqgJNSrMuzsnKM6cR2ZpTcmMNDMf2D1k2JDaYcfnKro"
+    },
+    "userSettings": {
+      "minMag": 3,
+      "cityFilter": "",
+      "active": true
+    }
+  },
+  {
+    "endpoint": "https://fcm.googleapis.com/fcm/send/d9-taRZ-RG8:APA91bH5q0CtVdo-0etN_YzQXYfBOXbWuOW578HWDqfQSpI-Q8eve8g6fXoV7Dv18gEK-elIHxo4dM4b-Hr4fm6cHaFqtbhB_hT0qn0xv6VCqxC6eeZuh066bsb54jk-hdjVE3qa027z",
+    "keys": {
+      "p256dh": "BHIQoLHWJLPFDolRgRuVLk5bbyybT3tdQmiuukPusUdwU2WlJ4EUAcsm40N_NLBklSZdfbivRLwPdbf6EUzFVxE",
+      "auth": "teyZG1lXP-YenFdHcs6pEA"
+    },
+    "userSettings": {
+      "minMag": 3,
+      "cityFilter": "",
+      "active": true
+    }
+  }
+]

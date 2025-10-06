@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖥️ Epicentra Advanced Terminal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            min-height: 100vh;
+            color: #00ff00;
+            overflow: hidden;
+        }
+        
+        /* Terminal Header */
+        .terminal-header {
+            background: #1a1a1a;
+            border-bottom: 2px solid #333;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .terminal-title {
+            color: #00ff00;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .terminal-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .close { background: #ff5f56; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #27ca3f; }
+        
+        /* Terminal Container - Full Width */
+        .terminal-container {
+            height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Terminal Output - Full Screen */
+        .terminal-output {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #000;
+            border: 1px solid #333;
+            margin: 0;
+            border-radius: 0;
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: calc(100vh - 120px);
+        }
+        
+        .terminal-line {
+            margin-bottom: 8px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 4px 0;
+        }
+        
+        .terminal-line.success {
+            color: #00ff00;
+        }
+        
+        .terminal-line.error {
+            color: #ff4444;
+        }
+        
+        .terminal-line.warning {
+            color: #ffaa00;
+        }
+        
+        .terminal-line.info {
+            color: #4488ff;
+        }
+        
+        .terminal-line.system {
+            color: #888;
+        }
+        
+        /* Command Input */
+        .terminal-input-container {
+            background: #1a1a1a;
+            border-top: 2px solid #333;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .terminal-prompt {
+            color: #00ff00;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            caret-color: #00ff00;
+        }
+        
+        .terminal-input::placeholder {
+            color: #666;
+        }
+        
+        /* Sidebar - Hidden by default */
+        .terminal-sidebar {
+            width: 0;
+            background: #1a1a1a;
+            border-right: 2px solid #333;
+            padding: 0;
+            overflow-y: auto;
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: fixed;
+            left: -300px;
+            top: 60px;
+            height: calc(100vh - 60px);
+            z-index: 1000;
+        }
+        
+        .terminal-sidebar.show {
+            width: 300px;
+            padding: 20px;
+            opacity: 1;
+            left: 0;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-title {
+            color: #00ff00;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .command-list {
+            list-style: none;
+        }
+        
+        .command-item {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .command-item:hover {
+            background: #3a3a3a;
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        
+        .command-item:active {
+            transform: scale(0.98);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .quick-btn:hover {
+            background: #3a3a3a;
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+        
+        .quick-btn.danger {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        
+        .quick-btn.danger:hover {
+            background: #3a1a1a;
+        }
+        
+        /* Log Clear Section */
+        .log-clear-section {
+            background: #2a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .log-clear-title {
+            color: #ff4444;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .log-clear-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .log-clear-btn {
+            background: #3a1a1a;
+            border: 1px solid #ff4444;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #ff4444;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .log-clear-btn:hover {
+            background: #4a1a1a;
+            color: #fff;
+        }
+        
+        /* System Info */
+        .system-info {
+            background: #1a2a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .system-info-title {
+            color: #00ff00;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .system-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+        
+        .system-info-label {
+            color: #888;
+        }
+        
+        .system-info-value {
+            color: #00ff00;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .terminal-sidebar {
+                width: 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .terminal-sidebar {
+                display: none;
+            }
+            
+            .terminal-container {
+                height: calc(100vh - 50px);
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+        
+        /* Animation */
+        .terminal-line.typing {
+            animation: typing 0.5s ease-in-out;
+        }
+        
+        @keyframes typing {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #444;
+            border-radius: 50%;
+            border-top-color: #00ff00;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Terminal Header -->
+    <div class="terminal-header">
+        <div class="terminal-title">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" style="background: none; border: none; color: #00ff00; font-size: 18px; margin-right: 15px; cursor: pointer;">
+                <i class="fas fa-bars"></i>
+            </button>
+            <i class="fas fa-terminal"></i>
+            Epicentra Advanced Terminal
+        </div>
+        <div class="terminal-controls">
+            <button class="control-btn close" onclick="closeTerminal()"></button>
+            <button class="control-btn minimize" onclick="minimizeTerminal()"></button>
+            <button class="control-btn maximize" onclick="maximizeTerminal()"></button>
+        </div>
+    </div>
+    
+    <!-- Terminal Container -->
+    <div class="terminal-container">
+        <!-- Sidebar -->
+        <div class="terminal-sidebar">
+            <!-- Quick Actions -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-bolt"></i>
+                    Hızlı İşlemler
+                </div>
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="executeCommand('pm2 list')">
+                        <i class="fas fa-list"></i>
+                        PM2 List
+                    </button>
+                    <button class="quick-btn" onclick="executeCommand('pm2 logs')">
+                        <i class="fas fa-file-alt"></i>
+                        PM2 Logs
+                    </button>
+                    <button class="quick-btn" onclick="executeCommand('free -h')">
+                        <i class="fas fa-memory"></i>
+                        Memory
+                    </button>
+                    <button class="quick-btn" onclick="executeCommand('df -h')">
+                        <i class="fas fa-hdd"></i>
+                        Disk Usage
+                    </button>
+                    <button class="quick-btn" onclick="executeCommand('ps aux | head -20')">
+                        <i class="fas fa-tasks"></i>
+                        Processes
+                    </button>
+                    <button class="quick-btn" onclick="executeCommand('uptime')">
+                        <i class="fas fa-clock"></i>
+                        Uptime
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Log Clear Section -->
+            <div class="log-clear-section">
+                <div class="log-clear-title">
+                    <i class="fas fa-trash"></i>
+                    Log Temizleme
+                </div>
+                <div class="log-clear-buttons">
+                    <button class="log-clear-btn" onclick="clearLogs('all')">
+                        Tüm Logları Temizle
+                    </button>
+                    <button class="log-clear-btn" onclick="clearLogs('pm2-out.log')">
+                        PM2 Output Logs
+                    </button>
+                    <button class="log-clear-btn" onclick="clearLogs('pm2-error.log')">
+                        PM2 Error Logs
+                    </button>
+                    <button class="log-clear-btn" onclick="clearLogs('pm2-dev-out.log')">
+                        PM2 Dev Output
+                    </button>
+                    <button class="log-clear-btn" onclick="clearLogs('pm2-dev-error.log')">
+                        PM2 Dev Error
+                    </button>
+                </div>
+            </div>
+            
+            <!-- System Info -->
+            <div class="system-info">
+                <div class="system-info-title">
+                    <i class="fas fa-info-circle"></i>
+                    Sistem Bilgisi
+                </div>
+                <div id="system-info-content">
+                    <div class="loading"></div>
+                </div>
+            </div>
+            
+            <!-- Command Categories -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-terminal"></i>
+                    Sistem Komutları
+                </div>
+                <ul class="command-list" id="system-commands">
+                    <li class="command-item" onclick="executeCommand('ls -la')">ls -la</li>
+                    <li class="command-item" onclick="executeCommand('pwd')">pwd</li>
+                    <li class="command-item" onclick="executeCommand('whoami')">whoami</li>
+                    <li class="command-item" onclick="executeCommand('date')">date</li>
+                    <li class="command-item" onclick="executeCommand('uptime')">uptime</li>
+                    <li class="command-item" onclick="executeCommand('free -h')">free -h</li>
+                    <li class="command-item" onclick="executeCommand('df -h')">df -h</li>
+                    <li class="command-item" onclick="executeCommand('ps aux')">ps aux</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-cogs"></i>
+                    PM2 Komutları
+                </div>
+                <ul class="command-list" id="pm2-commands">
+                    <li class="command-item" onclick="executeCommand('pm2 list')">pm2 list</li>
+                    <li class="command-item" onclick="executeCommand('pm2 logs')">pm2 logs</li>
+                    <li class="command-item" onclick="executeCommand('pm2 monit')">pm2 monit</li>
+                    <li class="command-item" onclick="executeCommand('pm2 restart all')">pm2 restart all</li>
+                    <li class="command-item" onclick="executeCommand('pm2 stop all')">pm2 stop all</li>
+                    <li class="command-item" onclick="executeCommand('pm2 flush')">pm2 flush</li>
+                    <li class="command-item" onclick="executeCommand('pm2 save')">pm2 save</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-file-alt"></i>
+                    Log Komutları
+                </div>
+                <ul class="command-list" id="log-commands">
+                    <li class="command-item" onclick="executeCommand('tail -f logs/pm2-out.log')">tail -f logs/pm2-out.log</li>
+                    <li class="command-item" onclick="executeCommand('tail -f logs/pm2-error.log')">tail -f logs/pm2-error.log</li>
+                    <li class="command-item" onclick="executeCommand('journalctl -f')">journalctl -f</li>
+                    <li class="command-item" onclick="executeCommand('dmesg | tail')">dmesg | tail</li>
+                    <li class="command-item" onclick="executeCommand('find . -name "*.log"')">find . -name "*.log"</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-network-wired"></i>
+                    Ağ Komutları
+                </div>
+                <ul class="command-list" id="network-commands">
+                    <li class="command-item" onclick="executeCommand('netstat -tulpn')">netstat -tulpn</li>
+                    <li class="command-item" onclick="executeCommand('ss -tulpn')">ss -tulpn</li>
+                    <li class="command-item" onclick="executeCommand('ip addr show')">ip addr show</li>
+                    <li class="command-item" onclick="executeCommand('ping google.com')">ping google.com</li>
+                    <li class="command-item" onclick="executeCommand('curl -I google.com')">curl -I google.com</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Terminal Output -->
+        <div class="terminal-output" id="terminal-output">
+            <div class="terminal-line system">
+                <i class="fas fa-rocket"></i> Epicentra Advanced Terminal v1.0.0
+            </div>
+            <div class="terminal-line system">
+                <i class="fas fa-info-circle"></i> Terminal başlatıldı. Komut girmeye hazır.
+            </div>
+            <div class="terminal-line system">
+                <i class="fas fa-lightbulb"></i> Yardım için 'help' yazın veya sol menüden komut seçin.
+            </div>
+        </div>
+        
+        <!-- Command Input -->
+        <div class="terminal-input-container">
+            <div class="terminal-prompt">
+                <i class="fas fa-chevron-right"></i> epicentra@terminal:~$
+            </div>
+            <input 
+                type="text" 
+                class="terminal-input" 
+                id="terminal-input" 
+                placeholder="Komut girin..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let commandHistory = [];
+        let historyIndex = -1;
+        let currentWorkingDir = '/home/jonturk/Masaüstü/projects/Epicentra';
+        
+        // Initialize terminal
+        function initTerminal() {
+            const input = document.getElementById('terminal-input');
+            const output = document.getElementById('terminal-output');
+            
+            // Focus input
+            input.focus();
+            
+            // Load system info
+            loadSystemInfo();
+            
+            // Load available commands
+            loadCommands();
+            
+            // Command input handler
+            input.addEventListener('keydown', handleKeyDown);
+            
+            // Welcome message
+            addOutputLine('Terminal hazır. Komut girmeye başlayabilirsiniz.', 'system');
+        }
+        
+        // Handle keyboard input
+        function handleKeyDown(event) {
+            const input = document.getElementById('terminal-input');
+            
+            if (event.key === 'Enter') {
+                const command = input.value.trim();
+                if (command) {
+                    executeCommand(command);
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    input.value = '';
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandHistory[historyIndex] || '';
+                }
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex] || '';
+                } else {
+                    input.value = '';
+                    historyIndex = commandHistory.length;
+                }
+            } else if (event.key === 'Tab') {
+                event.preventDefault();
+                // Auto-complete could be implemented here
+            }
+        }
+        
+        // Execute command
+        async function executeCommand(command) {
+            const output = document.getElementById('terminal-output');
+            
+            // Add command to output
+            addOutputLine(`$ ${command}`, 'info');
+            
+            // Show loading
+            const loadingId = addOutputLine('<div class="loading"></div> Çalıştırılıyor...', 'system');
+            
+            try {
+                const response = await fetch('/api/terminal/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        command: command,
+                        workingDir: currentWorkingDir
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Remove loading
+                removeOutputLine(loadingId);
+                
+                if (result.success) {
+                    // Handle clear command
+                    if (command.trim() === 'clear' || command.trim() === 'cls') {
+                        clearTerminal();
+                    } else if (result.stdout) {
+                        addOutputLine(result.stdout, 'success');
+                    }
+                    if (result.stderr) {
+                        addOutputLine(result.stderr, 'error');
+                    }
+                    if (!result.stdout && !result.stderr && command.trim() !== 'clear' && command.trim() !== 'cls') {
+                        addOutputLine('Komut başarıyla çalıştırıldı.', 'success');
+                    }
+                } else {
+                    addOutputLine(`Hata: ${result.error}`, 'error');
+                    if (result.stderr) {
+                        addOutputLine(result.stderr, 'error');
+                    }
+                }
+                
+                // Update working directory if pwd command
+                if (command.trim() === 'pwd' && result.stdout) {
+                    currentWorkingDir = result.stdout.trim();
+                }
+                
+            } catch (error) {
+                removeOutputLine(loadingId);
+                addOutputLine(`Bağlantı hatası: ${error.message}`, 'error');
+            }
+            
+            // Scroll to bottom
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Clear logs
+        async function clearLogs(logType) {
+            const output = document.getElementById('terminal-output');
+            
+            addOutputLine(`Log temizleniyor: ${logType}`, 'warning');
+            
+            try {
+                const response = await fetch('/api/terminal/clear-logs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        logType: logType
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    addOutputLine(`✅ ${result.message}`, 'success');
+                    addOutputLine(`Temizlenen dosyalar: ${result.clearedFiles.join(', ')}`, 'info');
+                } else {
+                    addOutputLine(`❌ Hata: ${result.error}`, 'error');
+                }
+                
+            } catch (error) {
+                addOutputLine(`❌ Bağlantı hatası: ${error.message}`, 'error');
+            }
+            
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Load system info
+        async function loadSystemInfo() {
+            try {
+                const response = await fetch('/api/terminal/system-info');
+                const info = await response.json();
+                
+                const container = document.getElementById('system-info-content');
+                container.innerHTML = `
+                    <div class="system-info-item">
+                        <span class="system-info-label">Platform:</span>
+                        <span class="system-info-value">${info.platform}</span>
+                    </div>
+                    <div class="system-info-item">
+                        <span class="system-info-label">Architecture:</span>
+                        <span class="system-info-value">${info.arch}</span>
+                    </div>
+                    <div class="system-info-item">
+                        <span class="system-info-label">Hostname:</span>
+                        <span class="system-info-value">${info.hostname}</span>
+                    </div>
+                    <div class="system-info-item">
+                        <span class="system-info-label">Uptime:</span>
+                        <span class="system-info-value">${Math.round(info.uptime / 3600)}h</span>
+                    </div>
+                    <div class="system-info-item">
+                        <span class="system-info-label">Memory:</span>
+                        <span class="system-info-value">${Math.round((info.totalMemory - info.freeMemory) / 1024 / 1024 / 1024)}GB / ${Math.round(info.totalMemory / 1024 / 1024 / 1024)}GB</span>
+                    </div>
+                    <div class="system-info-item">
+                        <span class="system-info-label">CPUs:</span>
+                        <span class="system-info-value">${info.cpus}</span>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('system-info-content').innerHTML = '<div style="color: #ff4444;">Sistem bilgisi yüklenemedi</div>';
+            }
+        }
+        
+        // Load available commands
+        async function loadCommands() {
+            try {
+                const response = await fetch('/api/terminal/commands');
+                const commands = await response.json();
+                
+                // Populate command lists
+                populateCommandList('system-commands', commands.system);
+                populateCommandList('pm2-commands', commands.pm2);
+                populateCommandList('log-commands', commands.logs);
+                populateCommandList('network-commands', commands.network);
+                
+            } catch (error) {
+                console.error('Commands could not be loaded:', error);
+            }
+        }
+        
+        // Populate command list
+        function populateCommandList(listId, commands) {
+            const list = document.getElementById(listId);
+            if (list) {
+                list.innerHTML = commands.map(cmd => 
+                    `<li class="command-item" onclick="executeCommand('${cmd}')">${cmd}</li>`
+                ).join('');
+            }
+        }
+        
+        // Add output line
+        function addOutputLine(text, type = 'system') {
+            const output = document.getElementById('terminal-output');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${type} typing`;
+            line.innerHTML = text;
+            output.appendChild(line);
+            return line;
+        }
+        
+        // Remove output line
+        function removeOutputLine(lineElement) {
+            if (lineElement && lineElement.parentNode) {
+                lineElement.parentNode.removeChild(lineElement);
+            }
+        }
+        
+        // Clear terminal
+        function clearTerminal() {
+            const output = document.getElementById('terminal-output');
+            output.innerHTML = `
+                <div class="terminal-line system">
+                    <i class="fas fa-rocket"></i> Epicentra Advanced Terminal v1.0.0
+                </div>
+                <div class="terminal-line system">
+                    <i class="fas fa-info-circle"></i> Terminal temizlendi. Komut girmeye hazır.
+                </div>
+            `;
+        }
+        
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.terminal-sidebar');
+            sidebar.classList.toggle('show');
+        }
+        
+        // Terminal controls
+        function closeTerminal() {
+            if (confirm('Terminal kapatılsın mı?')) {
+                window.close();
+            }
+        }
+        
+        function minimizeTerminal() {
+            // Minimize functionality could be implemented
+            addOutputLine('Terminal minimize edildi.', 'system');
+        }
+        
+        function maximizeTerminal() {
+            // Maximize functionality could be implemented
+            addOutputLine('Terminal maximize edildi.', 'system');
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initTerminal);
+        
+        // Keep input focused
+        document.addEventListener('click', () => {
+            document.getElementById('terminal-input').focus();
+        });
+    </script>
+</body>
+</html>

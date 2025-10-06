@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Epicentra Advanced Monitor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        /* Animated particles background */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: gradientShift 5s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(30deg); }
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group label {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #10b981);
+            animation: shimmer 3s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+        
+        .stat-card h3 {
+            color: #94a3b8;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stat-card .icon {
+            font-size: 1.5em;
+        }
+        
+        .stat-card .value {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .label {
+            color: #64748b;
+            font-size: 0.95em;
+        }
+        
+        .stat-card.success .value {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-card.warning .value {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-card.danger .value {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Error Panel */
+        .error-panel {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .error-panel.show {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .error-panel h2 {
+            color: #ef4444;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .error-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .error-item {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            animation: errorBlink 0.5s ease;
+        }
+        
+        @keyframes errorBlink {
+            0%, 100% { background: rgba(15, 23, 42, 0.8); }
+            50% { background: rgba(239, 68, 68, 0.2); }
+        }
+        
+        .error-item .time {
+            color: #94a3b8;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        
+        .error-item .message {
+            color: #fca5a5;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        /* Process Cards */
+        .process-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .process-card:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+        }
+        
+        .process-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .process-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status-badge {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .status-badge.online {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        .status-badge.stopped {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        
+        .process-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .process-stat {
+            text-align: center;
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .process-stat:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .process-stat .label {
+            color: #94a3b8;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .process-stat .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .chart-card h3 {
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Logs Container */
+        .logs-section {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+        }
+        
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logs-header h3 {
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .log-filters {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            background: rgba(30, 41, 59, 0.8);
+            color: #94a3b8;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .filter-btn:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+        
+        .logs-container {
+            background: #0a0e27;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+        
+        .logs-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .logs-container::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+        }
+        
+        .logs-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        
+        .log-line {
+            padding: 5px 10px;
+            margin-bottom: 3px;
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+        
+        .log-line:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .log-line.error {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 3px solid #ef4444;
+            padding-left: 10px;
+            animation: errorHighlight 0.5s ease;
+        }
+        
+        @keyframes errorHighlight {
+            0%, 100% { background: rgba(239, 68, 68, 0.15); }
+            50% { background: rgba(239, 68, 68, 0.3); }
+        }
+        
+        .log-line.warn {
+            background: rgba(245, 158, 11, 0.15);
+            border-left: 3px solid #f59e0b;
+            padding-left: 10px;
+        }
+        
+        .log-line.success {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 3px solid #10b981;
+            padding-left: 10px;
+        }
+        
+        .log-timestamp {
+            color: #64748b;
+        }
+        
+        .log-level {
+            font-weight: bold;
+            margin: 0 8px;
+        }
+        
+        .log-level.ERROR {
+            color: #ef4444;
+        }
+        
+        .log-level.WARN {
+            color: #f59e0b;
+        }
+        
+        .log-level.INFO {
+            color: #3b82f6;
+        }
+        
+        .log-level.SUCCESS {
+            color: #10b981;
+        }
+        
+        .log-message {
+            color: #cbd5e1;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Alert Badge */
+        .alert-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: shake 0.5s ease;
+        }
+        
+        .alert-badge.show {
+            display: flex;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles"></div>
+    
+    <div class="alert-badge" id="alertBadge">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="alertText">Yeni Hata Tespit Edildi!</span>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-rocket"></i> Epicentra Server Monitor</h1>
+            <p class="subtitle">Gerçek Zamanlı Sistem İzleme ve Log Analizi</p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="autoRefresh"><i class="fas fa-sync-alt"></i> Otomatik Yenileme</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autoRefresh" checked>
+                    <span class="slider"></span>
+                </label>
+                <span id="refreshTimer" style="color: #64748b;">5s</span>
+            </div>
+            
+            <div class="control-group">
+                <button class="btn" onclick="fetchData()">
+                    <i class="fas fa-redo"></i> Yenile
+                </button>
+                <button class="btn" onclick="clearErrors()">
+                    <i class="fas fa-trash"></i> Hataları Temizle
+                </button>
+            </div>
+        </div>
+        
+        <!-- Error Panel -->
+        <div class="error-panel" id="errorPanel">
+            <h2><i class="fas fa-bug"></i> Tespit Edilen Hatalar (<span id="errorCount">0</span>)</h2>
+            <div class="error-list" id="errorList"></div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid"></div>
+        
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-line"></i> CPU Kullanımı (Son 60 Saniye)</h3>
+                <canvas id="cpuChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3><i class="fas fa-memory"></i> Bellek Kullanımı (Son 60 Saniye)</h3>
+                <canvas id="memoryChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Processes -->
+        <div id="processesContainer"></div>
+        
+        <!-- Logs Section -->
+        <div class="logs-section">
+            <div class="logs-header">
+                <h3><i class="fas fa-terminal"></i> Canlı Loglar</h3>
+                <div class="log-filters">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    <button class="filter-btn" data-filter="error">Hatalar</button>
+                    <button class="filter-btn" data-filter="warn">Uyarılar</button>
+                    <button class="filter-btn" data-filter="success">Başarılı</button>
+                </div>
+            </div>
+            <div class="logs-container" id="logsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let cpuData = [];
+        let memoryData = [];
+        let errors = [];
+        let currentFilter = 'all';
+        let cpuChart, memoryChart;
+        let autoRefreshInterval;
+        let refreshCountdown = 5;
+        
+        // Initialize particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Initialize charts
+        function initCharts() {
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleColor: '#e2e8f0',
+                        bodyColor: '#cbd5e1',
+                        borderColor: 'rgba(102, 126, 234, 0.5)',
+                        borderWidth: 1,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(102, 126, 234, 0.1)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(102, 126, 234, 0.1)' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            };
+            
+            cpuChart = new Chart(document.getElementById('cpuChart'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CPU %',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                    }]
+                },
+                options: chartOptions
+            });
+            
+            memoryChart = new Chart(document.getElementById('memoryChart'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Memory MB',
+                        data: [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                    }]
+                },
+                options: chartOptions
+            });
+        }
+        
+        function updateCharts(processes) {
+            const now = new Date().toLocaleTimeString('tr-TR');
+            const totalCPU = processes.reduce((sum, p) => sum + p.cpu, 0);
+            const totalMemory = processes.reduce((sum, p) => sum + p.memory, 0) / 1024 / 1024;
+            
+            cpuData.push(totalCPU);
+            memoryData.push(totalMemory);
+            
+            if (cpuData.length > 60) {
+                cpuData.shift();
+                memoryData.shift();
+            }
+            
+            const labels = cpuData.map((_, i) => i === cpuData.length - 1 ? now : '');
+            
+            cpuChart.data.labels = labels;
+            cpuChart.data.datasets[0].data = cpuData;
+            cpuChart.update('none');
+            
+            memoryChart.data.labels = labels;
+            memoryChart.data.datasets[0].data = memoryData;
+            memoryChart.update('none');
+        }
+        
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/processes');
+                const processes = await response.json();
+                
+                updateStats(processes);
+                updateProcesses(processes);
+                updateCharts(processes);
+                await fetchLogs();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                addError('Veri çekme hatası: ' + error.message);
+            }
+        }
+        
+        function updateStats(processes) {
+            const totalProcesses = processes.length;
+            const onlineProcesses = processes.filter(p => p.status === 'online').length;
+            const totalCPU = processes.reduce((sum, p) => sum + p.cpu, 0).toFixed(1);
+            const totalMemory = (processes.reduce((sum, p) => sum + p.memory, 0) / 1024 / 1024).toFixed(0);
+            const totalRestarts = processes.reduce((sum, p) => sum + p.restarts, 0);
+            
+            const statsGrid = document.getElementById('statsGrid');
+            const statusClass = onlineProcesses === totalProcesses ? 'success' : 
+                               onlineProcesses > 0 ? 'warning' : 'danger';
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card ${statusClass}">
+                    <h3><i class="fas fa-server icon"></i> Durum</h3>
+                    <div class="value">${onlineProcesses}/${totalProcesses}</div>
+                    <div class="label">Online Servisler</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-microchip icon"></i> CPU</h3>
+                    <div class="value">${totalCPU}%</div>
+                    <div class="label">Toplam Kullanım</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-memory icon"></i> Bellek</h3>
+                    <div class="value">${totalMemory}</div>
+                    <div class="label">MB RAM</div>
+                </div>
+                <div class="stat-card ${totalRestarts > 5 ? 'warning' : ''}">
+                    <h3><i class="fas fa-redo icon"></i> Yeniden Başlatma</h3>
+                    <div class="value">${totalRestarts}</div>
+                    <div class="label">Toplam Restart</div>
+                </div>
+                <div class="stat-card ${errors.length > 0 ? 'danger' : 'success'}">
+                    <h3><i class="fas fa-bug icon"></i> Hatalar</h3>
+                    <div class="value">${errors.length}</div>
+                    <div class="label">Tespit Edilen</div>
+                </div>
+            `;
+        }
+        
+        function formatUptime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            
+            if (days > 0) return `${days}g ${hours % 24}s`;
+            if (hours > 0) return `${hours}s ${minutes % 60}d`;
+            if (minutes > 0) return `${minutes}d ${seconds % 60}s`;
+            return `${seconds}s`;
+        }
+        
+        async function updateProcesses(processes) {
+            const container = document.getElementById('processesContainer');
+            
+            const processesHTML = processes.map((proc) => {
+                const memoryMB = (proc.memory / 1024 / 1024).toFixed(0);
+                const statusIcon = proc.status === 'online' ? 
+                    '<i class="fas fa-check-circle"></i>' : 
+                    '<i class="fas fa-times-circle"></i>';
+                
+                return `
+                    <div class="process-card">
+                        <div class="process-header">
+                            <div class="process-name">
+                                <i class="fas fa-cog fa-spin"></i>
+                                ${proc.name}
+                            </div>
+                            <div class="status-badge ${proc.status}">
+                                ${statusIcon} ${proc.status.toUpperCase()}
+                            </div>
+                        </div>
+                        
+                        <div class="process-stats">
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-hashtag"></i> PID</div>
+                                <div class="value">${proc.pid || 'N/A'}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-microchip"></i> CPU</div>
+                                <div class="value">${proc.cpu}%</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-memory"></i> RAM</div>
+                                <div class="value">${memoryMB} MB</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-clock"></i> Uptime</div>
+                                <div class="value">${formatUptime(proc.uptime)}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-redo"></i> Restarts</div>
+                                <div class="value">${proc.restarts}</div>
+                            </div>
+                            <div class="process-stat">
+                                <div class="label"><i class="fas fa-tag"></i> Version</div>
+                                <div class="value">${proc.version || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = processesHTML;
+        }
+        
+        async function fetchLogs() {
+            try {
+                const response = await fetch('/api/logs/epicentra-server');
+                const data = await response.json();
+                const logs = data.logs || '';
+                
+                const lines = logs.split('\n').filter(line => line.trim());
+                const logsContainer = document.getElementById('logsContainer');
+                
+                const formattedLogs = lines.map(line => {
+                    let className = 'log-line';
+                    let level = 'INFO';
+                    
+                    // Hata tespiti
+                    if (line.match(/error|exception|fail|crash/i)) {
+                        className += ' error';
+                        level = 'ERROR';
+                        addError(line);
+                    } else if (line.match(/warn|warning/i)) {
+                        className += ' warn';
+                        level = 'WARN';
+                    } else if (line.match(/success|200|ok/i)) {
+                        className += ' success';
+                        level = 'SUCCESS';
+                    }
+                    
+                    // Timestamp extraction
+                    const timeMatch = line.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/);
+                    const timestamp = timeMatch ? timeMatch[1] : '';
+                    const message = line.replace(timestamp, '').trim();
+                    
+                    return `
+                        <div class="${className}">
+                            <span class="log-timestamp">${timestamp}</span>
+                            <span class="log-level ${level}">[${level}]</span>
+                            <span class="log-message">${escapeHtml(message)}</span>
+                        </div>
+                    `;
+                }).reverse().join('');
+                
+                logsContainer.innerHTML = formattedLogs || '<div style="color: #64748b; text-align: center; padding: 20px;">Henüz log kaydı yok</div>';
+                
+                // Auto scroll to bottom
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function addError(message) {
+            const errorObj = {
+                time: new Date().toLocaleString('tr-TR'),
+                message: message,
+                id: Date.now()
+            };
+            
+            // Aynı hatayı tekrar ekleme
+            if (!errors.some(e => e.message === message)) {
+                errors.push(errorObj);
+                updateErrorPanel();
+                showAlertBadge();
+            }
+        }
+        
+        function updateErrorPanel() {
+            const panel = document.getElementById('errorPanel');
+            const list = document.getElementById('errorList');
+            const count = document.getElementById('errorCount');
+            
+            count.textContent = errors.length;
+            
+            if (errors.length > 0) {
+                panel.classList.add('show');
+                list.innerHTML = errors.slice(-10).reverse().map(err => `
+                    <div class="error-item">
+                        <div class="time"><i class="fas fa-clock"></i> ${err.time}</div>
+                        <div class="message">${escapeHtml(err.message)}</div>
+                    </div>
+                `).join('');
+            } else {
+                panel.classList.remove('show');
+            }
+        }
+        
+        function showAlertBadge() {
+            const badge = document.getElementById('alertBadge');
+            badge.classList.add('show');
+            setTimeout(() => {
+                badge.classList.remove('show');
+            }, 5000);
+        }
+        
+        function clearErrors() {
+            errors = [];
+            updateErrorPanel();
+        }
+        
+        // Auto refresh toggle
+        document.getElementById('autoRefresh').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        });
+        
+        function startAutoRefresh() {
+            refreshCountdown = 5;
+            autoRefreshInterval = setInterval(() => {
+                refreshCountdown--;
+                document.getElementById('refreshTimer').textContent = refreshCountdown + 's';
+                
+                if (refreshCountdown <= 0) {
+                    fetchData();
+                    refreshCountdown = 5;
+                }
+            }, 1000);
+        }
+        
+        function stopAutoRefresh() {
+            clearInterval(autoRefreshInterval);
+            document.getElementById('refreshTimer').textContent = 'Kapalı';
+        }
+        
+        // Log filters
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.filter;
+                fetchLogs();
+            });
+        });
+        
+        // Initialize
+        createParticles();
+        initCharts();
+        fetchData();
+        startAutoRefresh();
+    </script>
+</body>
+</html>
