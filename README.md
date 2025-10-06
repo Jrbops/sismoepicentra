@@ -65,8 +65,8 @@ Epicentra, 3 farklı bot seçeneği sunar:
 
 ```bash
 # Repository'yi klonla
-git clone https://github.com/[username]/Epicentra.git
-cd Epicentra
+git clone https://github.com/[username]/sismoepicentra.git
+cd sismoepicentra
 
 # Bağımlılıkları yükle
 npm install
@@ -134,7 +134,7 @@ pm2 start ecosystem.config.js
 ## 📁 Proje Yapısı
 
 ```
-Epicentra/
+sismoepicentra/
 ├── components/          # Vue bileşenleri
 ├── pages/              # Nuxt sayfaları
 ├── server/             # API endpoints
@@ -213,7 +213,7 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 ## 📞 İletişim
 
 - **Website**: [www.zelzele.io](https://www.zelzele.io)
-- **GitHub**: [Epicentra Repository](https://github.com/[username]/Epicentra)
+- **GitHub**: [SismoEpicentra Repository](https://github.com/[username]/sismoepicentra)
 
 ---
 
