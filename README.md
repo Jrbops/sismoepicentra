@@ -65,7 +65,7 @@ Epicentra, 3 farklı bot seçeneği sunar:
 
 ```bash
 # Repository'yi klonla
-git clone https://github.com/[username]/sismoepicentra.git
+git clone https://github.com/Jrbops/sismoepicentra.git
 cd sismoepicentra
 
 # Bağımlılıkları yükle
@@ -213,7 +213,7 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 ## 📞 İletişim
 
 - **Website**: [www.zelzele.io](https://www.zelzele.io)
-- **GitHub**: [SismoEpicentra Repository](https://github.com/[username]/sismoepicentra)
+- **GitHub**: [SismoEpicentra Repository](https://github.com/Jrbops/sismoepicentra)
 
 ---
 

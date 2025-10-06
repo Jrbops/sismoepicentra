@@ -39,7 +39,7 @@ echo ""
 echo -e "${YELLOW}3. Aşağıdaki Komutları Çalıştırın:${NC}"
 echo ""
 echo -e "${GREEN}# Remote repository ekle (URL'i kendi repository'nizle değiştirin)${NC}"
-echo -e "${CYAN}git remote add origin https://github.com/USERNAME/sismoepicentra.git${NC}"
+echo -e "${CYAN}git remote add origin https://github.com/Jrbops/sismoepicentra.git${NC}"
 echo ""
 echo -e "${GREEN}# Ana branch'i main olarak ayarla${NC}"
 echo -e "${CYAN}git branch -M main${NC}"
@@ -51,7 +51,7 @@ echo ""
 echo -e "${BLUE}🔧 Otomatik Kurulum (Repository URL'i hazırsa):${NC}"
 echo "----------------------------------------"
 echo ""
-read -p "GitHub repository URL'inizi girin (örn: https://github.com/username/sismoepicentra.git): " REPO_URL
+read -p "GitHub repository URL'inizi girin (örn: https://github.com/Jrbops/sismoepicentra.git): " REPO_URL
 
 if [ ! -z "$REPO_URL" ]; then
     echo ""
